@@ -6,372 +6,25 @@
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, viewport-fit=cover"/>
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
-  <style>
-    html {
-      height: 100%;
-    }
-
-    body {
-      align-items: center;
-      display: flex;
-      font-size: 16px;
-      font-family: sans-serif;
-      height: 100%;
-      justify-content: center;
-      padding: 0;
-      margin: 0;
-    }
-
-    button:focus {
-      outline:0;
-    }
-
-    .player {
-      display: flex;
-    }
-
-    .handle {
-      background: linear-gradient(180deg, rgba(72, 88, 75, 1) 0%, rgba(206, 235, 239, 1) 31%, rgba(111, 104, 96, 1) 100%);
-      border-bottom-left-radius: 3px 6px;
-      border-top-left-radius: 3px 6px;
-      box-shadow: inset 1.5px 0 1px 0 rgba(255, 255, 255, .5);
-      margin: auto 0;
-      height: 19px;
-      margin-right: -2px;
-      position: relative;
-      width: 26px;
-    }
-
-    .handle::before {
-      background: #000;
-      border-radius: 50%;
-      box-shadow: inset 1px 1px 1px 2px rgba(255, 255, 255, .35);
-      content: '';
-      display: block;
-      height: 9px;
-      left: 4px;
-      top: 50%;
-      margin-top: -4.5px;
-      position: absolute;
-      width: 9px;
-    }
-
-    .stick {
-      background: rgb(146,157,159);
-      background: linear-gradient(180deg, rgba(146, 157, 159, 1) 0%, rgba(206, 235, 239, 1) 31%, rgba(111, 104, 96, 1) 100%);
-      border-bottom-left-radius: 3px 17px;
-      border-top-left-radius: 3px 17px;
-      box-shadow: inset 1.5px 0 1.5px 1px rgba(255, 255, 255, .5);
-      margin: auto 0;
-      height: 34px;
-      margin-right: -2px;
-      width: 9px;
-    }
-
-    .body {
-      align-items: center;
-      background: #30444b;
-      border-bottom-left-radius: 62px;
-      border-bottom-right-radius: 44px 62px;
-      border-top-left-radius: 62px;
-      border-top-right-radius: 44px 62px;
-      box-sizing: border-box;
-      box-shadow:
-        2px 0 1px 1px rgba(0, 0, 0, .5),
-        inset 2px 0 2px 0 rgba(255, 255, 255, .95)
-      ;
-      display: flex;
-      height: 124px;
-      margin: auto;
-      padding-left: 28px;
-      position: relative;
-      width: 370px;
-    }
-
-    .i {
-      background: #0d161d;
-      border-radius: 50%;
-      height: 8px;
-      position: absolute;
-      width: 8px;
-    }
-
-    .i.i--1 {
-      background: #2e444f;
-      box-shadow:
-        inset 1.5px 0 1.5px 1px rgba(0, 0, 0, .5),
-        inset -1px 0 1px .25px rgba(255, 255, 255, .25)
-      ;
-      left: 39px;
-      top: 10px;
-    }
-
-    .i.i--2 {
-      background: #2e444f;
-      box-shadow:
-        inset 1.5px 0 1.5px 1px rgba(0, 0, 0, .5),
-        inset -1px 0 1px .25px rgba(255, 255, 255, .25)
-      ;
-      left: 25px;
-      top: 21px;
-    }
-
-    .i.i--3 {
-      background: #2e444f;
-      box-shadow:
-        inset 1.5px 0 1.5px 1px rgba(0, 0, 0, .5),
-        inset -1px 0 1px .25px rgba(255, 255, 255, .25)
-      ;
-      left: 14px;
-      top: 38px;
-    }
-
-    .i.i--4 {
-      background: #2e444f;
-      box-shadow:
-        inset 1.5px 0 1.5px 1px rgba(0, 0, 0, .5),
-        inset -1px 0 1px .25px rgba(255, 255, 255, .25)
-      ;
-      left: 8px;
-      top: 57px;
-    }
-
-    .i.i--5 {
-      left: 26px;
-      bottom: 21px;
-    }
-
-    .i.i--6 {
-      left: 14px;
-      bottom: 38px;
-    }
-
-    .i.i--7 {
-      background: #2e444f;
-      box-shadow:
-        inset 1.5px 0 1.5px 1px rgba(0, 0, 0, .5),
-        inset -1px 0 1px .25px rgba(255, 255, 255, .25)
-      ;
-      left: 41px;
-      bottom: 10px;
-    }
-
-    .cta {
-      align-items: center;
-      background: #cef5fc;
-      border-radius: 50%;
-      box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, .25);
-      display: flex;
-      height: 75px;
-      justify-content: center;
-      position: relative;
-      width: 75px;
-    }
-
-    .cta > div {
-      align-items: center;
-      border-radius: 50%;
-      box-shadow: inset 0 -2px 3px 1px rgba(105, 143, 144, .75);
-      content: '';
-      display: flex;
-      height: 57px;
-      justify-content: center;
-      left: 50%;
-      margin-left: -28px;
-      margin-top: -28px;
-      position: absolute;
-      top: 50%;
-      width: 57px;
-    }
-
-    .cta button {
-      align-items: center;
-      background: #d6f9f5;
-      border: 0;
-      border-radius: 50%;
-      box-shadow:
-        inset 0 -2px 3px 1px rgba(115, 138, 144, .75),
-        inset 2px 1px 3px 1px rgba(115, 138, 144, .25),
-        inset 4px 0 4px 2px rgba(255, 255, 255, .75)
-      ;
-      cursor: pointer;
-      display: flex;
-      height: 46px;
-      justify-content: center;
-      margin: auto;
-      width: 46px;
-    }
-
-    .display {
-      align-items: center;
-      background: #a2bcba;
-      border-bottom-left-radius: 32px 53px;
-      border-bottom-right-radius: 32px 53px;
-      border-top-left-radius: 32px 53px;
-      border-top-right-radius: 32px 53px;
-      box-shadow: 0 0 2px 2px rgba(0, 0, 0, .5);
-      color: #cff9f8;
-      font-size: 11px;
-      display: flex;
-      height: 106px;
-      margin-left: 13px;
-      width: 250px;
-    }
-
-    .display__begin {
-      align-items: center;
-      flex: 0 0 auto;
-      justify-content: center;
-      margin: auto 0;
-      text-align: center;
-      width: 38px;
-    }
-
-    .display__middle {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      flex: 0 0 auto;
-      height: 106px;
-      justify-content: center;
-      margin: auto 0;
-      width: 151px;
-    }
-
-    .display__middle .display__middle__part {
-      align-items: center;
-      display: flex;
-      flex: 1 1 auto;
-      justify-content: center;
-      margin: 0;
-      text-align: center;
-    }
-
-    .display__end {
-      align-items: center;
-      display: flex;
-      flex: 1 1 auto;
-      justify-content: center;
-      margin: auto 0;
-      text-align: center;
-    }
-
-    .screen {
-      align-items: center;
-      background: #70a4a0;
-      box-sizing: border-box;
-      color: rgba(0, 0, 0, .8);
-      flex: 0 0 auto;
-      font-family: 'VT323', monospace;
-      font-size: 20px;
-      display: flex;
-      height: 59px;
-      overflow: hidden;
-      padding: 0;
-      position: relative;
-      white-space: nowrap;
-      width: 151px;
-    }
-
-    @keyframes screenMarquee {
-      from { margin-left: 0; } to { margin-left: -200px; }
-    }
-
-    .screen p {
-      animation: screenMarquee 3s linear infinite;
-      margin: 0;
-      padding: 0;
-    }
-
-    .screen.screen--playing::after {
-      bottom: 0;
-      box-shadow: inset 2px 0 15px 15px rgba(0, 255, 0, .35);
-      content: '';
-      display: block;
-      left: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
-      z-index: 2;
-    }
-
-    .screen__content {
-      align-items: center;
-      box-shadow: inset 0 1px 2.5px 3px rgba(75, 115, 114, .75);
-      display: flex;
-      flex: 1 1 auto;
-      height: 59px;
-      margin: 0;
-      width: 151px;
-    }
-
-    .screen.screen--playing .screen__content {
-      background: rgba(0, 255, 0, .25);
-    }
-
-    .top {
-      height: 124px;
-      margin-left: -44px;
-      width: 139px;
-    }
-
-    .top button {
-      background: #30444b;
-      border: 0;
-      border-bottom-right-radius: 62px;
-      border-top-right-radius: 62px;
-      box-shadow:
-        inset -2px 0 2px 0 rgba(255, 255, 255, .95)
-      ;
-      cursor: pointer;
-      height: 124px;
-      width: 139px;
-    }
-
-    .play-icon {
-      display: flex;
-      height: 17px;
-      margin: auto;
-      width: 21px;
-    }
-
-    .play-icon::before {
-      border-color: transparent transparent transparent #b8cccc;
-      border-style: solid;
-      border-width: 8.5px 0 8.5px 12px;
-      content: '';
-      display: block;
-      margin: 0 auto 0 0;
-      height: 0;
-      width: 0;
-    }
-
-    .play-icon i {
-      border-color: transparent transparent transparent #e6ffff;
-      border-style: solid;
-      border-width: 8.5px 0 8.5px 12px;
-      content: '';
-      display: block;
-      margin: 0 auto 0 -10px;
-      height: 0;
-      width: 0;
-    }
-
-    .play-icon::after {
-      background: #e6ffff;
-      border-radius: 2px;
-      box-shadow: inset 2px 0 1px 0 rgba(0, 0, 0, .2);
-      content: '';
-      display: block;
-      height: 17px;
-      margin: 0 0 0 auto;
-      width: 6px;
-    }
-  </style>
-</head>
+  <link href="style.css" rel="stylesheet"/>
+<style>
+[v-cloak] {
+  display: none !important
+}
+</style>
 </head>
 <body>
-  <div class="player" id="mp3player">
+  <div class="player" id="mp3player" v-cloak>
+    <button
+      type="button"
+      id="nav"
+      class="nav"
+      :class="{ 'nav--dragging': vdDraggingNav }"
+      :style="{ 'transform': 'rotate(' + vdDraggingNavDegree + 'deg)' }"
+      @mousedown="mtdStartDraggingNav"
+      @mouseup="mtdStopDraggingNav"
+    >
+    </button>
     <div class="handle">
     </div>
     <div class="stick">
@@ -387,13 +40,21 @@
       <div class="cta">
         <div>
           <button
-            @click="mtdTogglePlayAudio"
+            type="button"
+            @mousedown="mtdMainButtonPressed"
+            @mouseup="mtdMainButtonReleased"
           >
             <i class="play-icon">
               <i>
               </i>
             </i>
           </button>
+          <div
+            v-show="vdPlayerStatus === 2"
+            style="position: absolute; left: 0; top: 0;opacity: 0; margin-top: -11px; margin-left: -11px;"
+          >
+            <iframe src="https://open.spotify.com/embed/track/0ofMkI3jzmGCElAOgOLeo3" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+          </div>
         </div>
       </div>
       <div class="display">
@@ -406,10 +67,44 @@
           </div>
           <div
             class="screen"
-            :class="{ 'screen--playing': vdIsPlaying }"
+            :class="{ 'screen--playing': vdPlayerStatus > 0 }"
           >
             <div class="screen__content">
-              <p>Pato - Improvisacion guitarra.mp3</p>
+              <ul v-if="vdPlayerStatus === 1">
+                <li
+                  class="menu1__item"
+                  :class="{ 'menu1__item--active': vdMenuActive === 1 }"
+                >
+                  <button type="button" @click="vdMenuActive = 1"><span>MSC</span></button>
+                </li>
+                <li
+                  class="menu1__item"
+                  :class="{ 'menu1__item--active': vdMenuActive === 2 }"
+                >
+                  <button type="button" @click="vdMenuActive = 2"><span>REC</span></button>
+                </li>
+                <li
+                  class="menu1__item"
+                  :class="{ 'menu1__item--active': vdMenuActive === 3 }"
+                >
+                  <button type="button" @click="vdMenuActive = 3"><span>RPL</span></button>
+                </li>
+                <li
+                  class="menu1__item"
+                  :class="{ 'menu1__item--active': vdMenuActive === 4 }"
+                >
+                  <button type="button" @click="vdMenuActive = 4"><span>FM</span></button>
+                </li>
+                <li
+                  class="menu1__item"
+                  :class="{ 'menu1__item--active': vdMenuActive === 5 }"
+                >
+                  <button type="button" @click="vdMenuActive = 5"><span>SYS</span></button>
+                </li>
+              </ul>
+              <div v-if="vdPlayerStatus === 2">
+                <p>Corona - The rythm of the night.mp3</p>
+              </div>
             </div>
           </div>
           <div class="display__middle__part">
@@ -424,46 +119,62 @@
     <div class="top">
       <button
         v-show="vdTop"
+        type="button"
         @mousedown.prevent.stop="vdTop = false"
         @click="vdTop = false"
       >
       </button>
     </div>
   </div>
-  <script src="https://unpkg.com/vue@next"></script>
-  <script>
-    const Mp3player = {
-      data() {
-        return {
-          vdAudioElement: document.createElement('audio'),
-          vdIsPlaying: false,
-          vdTop: true,
-        }
-      },
-      mounted: function() {
-        this.vdAudioElement.preload = 'auto';
-        const srcElement = document.createElement('source');
-        srcElement.src = 'pato-improvisacion-guitarra.mp3';
-        this.vdAudioElement.appendChild(srcElement);
-        this.vdAudioElement.load();
-      },
-      methods: {
-        /**
-         * Start or stpos playing the audio.
-         */
-        mtdTogglePlayAudio: function() {
-          if (this.vdIsPlaying) {
-            this.vdIsPlaying = false;
-            this.vdAudioElement.pause();
-            clearTimeout(this.vdTimer);
-            return;
-          }
-          this.vdIsPlaying = true;
-          this.vdAudioElement.play();
-        },
-      },
-    }
-    Vue.createApp(Mp3player).mount('#mp3player')
-  </script>
+
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+/*
+<iframe src="https://open.spotify.com/embed/album/6rrPmmb2lQd5pNRL6HKBZx" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous">
+<//script>
+<script src="https://sdk.scdn.co/spotify-player.js"><//script>
+
+window.spotifyToken = 'BQDIfFW7DuL2WeF0jC54kz5crpHxayyyctfKLsxptif6nQ81PYA6xSqrSIeXMiHvcFOZfZYEuLRkCsf7AuzG5w9-JxyESvT-_SwjiRoErkMzXoE9hIYZHu-f_tw14juckXxWUTb6qmrqF7nq2isa_VQRbDHIfAu-yi0v';
+window.spotifyDeviceId = '';
+window.onSpotifyWebPlaybackSDKReady = () => {
+  const player = new Spotify.Player({
+    name: 'Web Playback SDK Quick Start Player',
+    getOAuthToken:
+      /**
+       *
+       */ /*
+      (_cb) => {
+
+        _cb(window.spotifyToken);
+      }
+  });
+
+  // Error handling
+  player.addListener('initialization_error', ({ message }) => { console.error(message); });
+  player.addListener('authentication_error', ({ message }) => { console.error(message); });
+  player.addListener('account_error', ({ message }) => { console.error(message); });
+  player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+  // Playback status updates
+  player.addListener('player_state_changed', state => { console.log(state); });
+
+  // Ready
+  player.addListener('ready', ({ device_id }) => {
+    // console.log('Ready with Device ID', deviceId);
+    window.spotifyDeviceId = device_id;
+  });
+
+  // Not Ready
+  player.addListener('not_ready', ({ device_id }) => {
+    console.log('Device ID has gone offline', device_id);
+  });
+
+  // Connect to the player!
+  player.connect();
+}; */
+</script>
+<script src="script.js"></script>
 </body>
 </html>
