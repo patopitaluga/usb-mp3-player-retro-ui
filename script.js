@@ -1,3 +1,5 @@
+screen.lockOrientation('portrait');
+
 let pressedTo = setTimeout(() => {
 }, 10);
 
