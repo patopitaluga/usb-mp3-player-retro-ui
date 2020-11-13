@@ -22,7 +22,9 @@
       :class="{ 'nav--dragging': vdDraggingNav }"
       :style="{ 'transform': 'rotate(' + vdDraggingNavDegree + 'deg)' }"
       @mousedown="mtdStartDraggingNav"
+      @touchstart.prevent.stop="mtdStartDraggingNav"
       @mouseup="mtdStopDraggingNav"
+      @touchend.prevent.stop="mtdStopDraggingNav"
     >
     </button>
     <div class="handle">
@@ -42,7 +44,9 @@
           <button
             type="button"
             @mousedown="mtdMainButtonPressed"
+            @touchstart.prevent.stop="mtdMainButtonPressed"
             @mouseup="mtdMainButtonReleased"
+            @touchend.prevent.stop="mtdMainButtonReleased"
           >
             <i class="play-icon">
               <i>
@@ -121,6 +125,7 @@
         v-show="vdTop"
         type="button"
         @mousedown.prevent.stop="vdTop = false"
+        @touchstart.prevent.stop="vdTop = false"
         @click="vdTop = false"
       >
       </button>
