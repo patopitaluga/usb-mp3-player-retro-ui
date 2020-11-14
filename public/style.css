@@ -24,6 +24,20 @@ button:focus {
   outline:0;
 }
 
+* {
+
+  &:focus {
+    -webkit-tap-highlight-color: transparent;
+    outline:0;
+  }
+
+  &:active {
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+  }
+}
+
+
 .player {
   display: flex;
   position: relative;
@@ -85,7 +99,7 @@ button:focus {
   padding-left: 28px;
   position: relative;
   width: 370px;
-  z-index: 2;
+  z-index: 3;
 }
 
 .i {
@@ -228,7 +242,7 @@ button:focus {
   border-top-right-radius: 32px 53px;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, .5);
   color: #dff9f8;
-  font-size: 11px;
+  font-size: 12px;
   display: flex;
   height: 106px;
   margin-left: 13px;
@@ -266,11 +280,45 @@ button:focus {
 
 .display__end {
   align-items: center;
+  box-sizing: border-box;
   display: flex;
   flex: 1 1 auto;
-  justify-content: center;
+  font-size: 18px;
+  justify-content: flex-start;
+  letter-spacing: -1px;
   margin: auto 0;
-  text-align: center;
+  padding-left: 6px;
+  position: relative;
+  text-align: left;
+}
+
+.display__end::before {
+  background: rgb(223, 249, 248);
+  border-top: 1px rgb(162, 188, 186) solid;
+  border-bottom: 1px rgb(162, 188, 186) solid;
+  content: '';
+  display: block;
+  height: 3px;
+  left: 7px;
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  margin-left: 1px;
+  width: 36px;
+}
+
+.display__end::after {
+  background: rgb(223, 249, 248);
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  content: '';
+  display: block;
+  height: 10px;
+  position: absolute;
+  width: 11px;
+  top: 50%;
+  margin-top: -5px;
+  right: 8px;
 }
 
 .screen {
@@ -300,7 +348,7 @@ button:focus {
   padding: 0;
 } */
 
-.screen.screen--playing::after {
+.screen.screen--on::after {
   bottom: 0;
   box-shadow: inset 2px 0 15px 15px rgba(0, 0, 255, .35);
   content: '';
@@ -309,7 +357,7 @@ button:focus {
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 3;
+  z-index: 4;
 }
 
 .screen__content {
@@ -320,7 +368,11 @@ button:focus {
   height: 59px;
   margin: 0;
   width: 151px;
-  z-index: 4;
+  z-index: 5;
+}
+
+.screen__content > div {
+  width: 100%;
 }
 
 .screen__content ul {
@@ -375,13 +427,14 @@ button:focus {
   width: 100%;
 }
 
-.screen.screen--playing .screen__content {
+.screen.screen--on .screen__content {
   background: rgba(0, 0, 255, .25);
 }
 
 .top {
   height: 124px;
   margin-left: -44px;
+  position: relative;
   width: 139px;
 }
 
@@ -396,6 +449,34 @@ button:focus {
   cursor: pointer;
   height: 124px;
   width: 139px;
+  position: relative;
+  z-index: 2;
+}
+
+.top::before {
+  background: #666;
+  content: '';
+  display: block;
+  height: 80px;
+  margin-top: -40px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 65px;
+  z-index: 1;
+}
+
+.top::after {
+  background: #aaa;
+  content: '';
+  display: block;
+  height: 60px;
+  margin-top: -30px;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 65px;
+  z-index: 1;
 }
 
 .play-icon {
@@ -454,9 +535,23 @@ button:focus {
   margin-top: -8px;
   transition: transform .15s ease-in-out;
   width: 12px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .nav.nav--dragging {
   transition: none;
+}
+
+.nav::before {
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  left: 50%;
+  margin-left: -15px;
+  top: 0;
+  margin-top: -15px;
+  z-index: 1;
 }

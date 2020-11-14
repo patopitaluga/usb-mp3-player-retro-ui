@@ -2,12 +2,65 @@
 <html lang="es-es">
 <head>
   <meta charset="utf-8"/>
-  <title>.</title>
+  <title>USB Mp3 player sim</title>
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, viewport-fit=cover"/>
   <link rel="preconnect" href="https://fonts.gstatic.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+  <link href="" rel="stylesheet"/>
   <link href="style.css" rel="stylesheet"/>
+
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="USB Mp3 player retro ui for Spotify"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <meta name="msapplication-TileColor" content="#ffffff"/>
+
+  <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-icon-76x76.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png?r=1"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png?r=1"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/android-icon-192x192.png?r=1"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png?r=1"/>
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png?r=1"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png?r=1"/>
+  <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png?r=1"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="USB Mp3 player sim"/>
+
+  <meta property="og:title" content="USB Mp3 player sim"/>
+  <meta property="og:description" content="USB Mp3 player retro ui for Spotify"/>
+  <meta property="og:image" content="og-image.jpg"/>
+
+  <meta property="og:image:type" content="image/jpeg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+  <meta name="twitter:title" content="USB Mp3 player sim"/>
+  <meta name="twitter:description" content="USB Mp3 player retro ui for Spotify"/>
+  <meta name="twitter:image" content="/og-image3.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+
 <style>
+@font-face {
+  font-family: 'Libre Baskerville';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: local('Libre Baskerville Bold'), local('LibreBaskerville-Bold'), url('https://fonts.gstatic.com/s/librebaskerville/v9/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcA.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: local('VT323 Regular'), local('VT323-Regular'), url('https://fonts.gstatic.com/s/vt323/v12/pxiKyp0ihIEF2isfFJU.woff2') format('woff2');
+}
+
 [v-cloak] {
   display: none !important
 }
@@ -54,7 +107,7 @@
             </i>
           </button>
           <div
-            v-show="vdPlayerStatus === 2"
+            v-show="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER"
             style="position: absolute; left: 0; top: 0;opacity: 0; margin-top: -11px; margin-left: -11px;"
           >
             <iframe src="https://open.spotify.com/embed/track/0ofMkI3jzmGCElAOgOLeo3" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
@@ -71,10 +124,13 @@
           </div>
           <div
             class="screen"
-            :class="{ 'screen--playing': vdPlayerStatus > 0 }"
+            :class="{ 'screen--on': vdPlayerStatus !== vdPlayerSteps.OFF }"
           >
             <div class="screen__content">
-              <ul v-if="vdPlayerStatus === 1">
+              <div v-if="vdPlayerStatus === vdPlayerSteps.STARTING">
+                <p style="font-family: 'Libre Baskerville', serif;font-weight: 700;text-align: center;width: 100%;flex: 1 1 auto;display: block;">MP3 Player</p>
+              </div>
+              <ul v-if="vdPlayerStatus === vdPlayerSteps.MAIN_MENU">
                 <li
                   class="menu1__item"
                   :class="{ 'menu1__item--active': vdMenuActive === 1 }"
@@ -106,8 +162,14 @@
                   <button type="button" @click="vdMenuActive = 5"><span>SYS</span></button>
                 </li>
               </ul>
-              <div v-if="vdPlayerStatus === 2">
+              <div v-if="vdPlayerStatus === vdPlayerSteps.LOADING">
+                <p>Please Wait..</p>
+              </div>
+              <div v-if="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER">
                 <p>Corona - The rythm of the night.mp3</p>
+              </div>
+              <div v-if="vdPlayerStatus === vdPlayerSteps.TURNING_OFF">
+                <p>Stand by</p>
               </div>
             </div>
           </div>
@@ -180,6 +242,9 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   player.connect();
 }; */
 </script>
-<script src="script.js"></script>
+<script
+  type="module"
+  src="script.js"
+></script>
 </body>
 </html>
