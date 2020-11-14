@@ -1,7 +1,11 @@
+import { playerSteps } from './enum-player-status.mjs';
+
 if (screen.lockOrientation)
   screen.lockOrientation('portrait');
 
 let pressedTo = setTimeout(() => {
+}, 10);
+let screenLit = setTimeout(() => {
 }, 10);
 
 let navStickXPosition = 0;
@@ -13,10 +17,12 @@ const Mp3player = {
     return {
       // vdAudioElement: document.createElement('audio'),
       vdMainButtonPressed: false,
-      vdPlayerStatus: 0,
+      vdPlayerStatus: playerSteps.OFF,
+      vdScreenLit: false,
       vdMenuActive: 1,
       vdDraggingNav: false,
       vdDraggingNavDegree: 0,
+      vdPlayerSteps: playerSteps,
       vdIsPlaying: false,
       vdTop: true,
     }
@@ -44,19 +50,19 @@ const Mp3player = {
       if (draggingPos[0] < navStickXPosition) degreeRot = degreeRot *-1;
       if (degreeRot > 40) {
         degreeRot = 40;
-        if (this.vdPlayerStatus === 1 && this.navTriggered !== 1) {
+        if (this.vdPlayerStatus === playerSteps.MAIN_MENU && this.navTriggered !== 1) {
           this.vdMenuActive++;
           this.navTriggered = 1;
         }
       }
       if (degreeRot < -40) {
         degreeRot = -40;
-        if (this.vdPlayerStatus === 1 && this.navTriggered !== -1) {
+        if (this.vdPlayerStatus === playerSteps.MAIN_MENU && this.navTriggered !== -1) {
           this.vdMenuActive--;
           this.navTriggered = -1;
         }
       }
-      if (degreeRot < 0 && this.navTriggered === 1) this.navTriggered = 0;
+      if (degreeRot < 0 && this.navTriggered === playerSteps.MAIN_MENU) this.navTriggered = 0;
       if (degreeRot > 0 && this.navTriggered === -1) this.navTriggered = 0;
 
       if (this.vdMenuActive < 1)
@@ -90,21 +96,34 @@ const Mp3player = {
      */
     mtdMainButtonPressed: function() {
       this.vdMainButtonPressed = true;
-      if (this.vdPlayerStatus === 0) {
+      if (this.vdPlayerStatus === playerSteps.OFF) {
         pressedTo = setTimeout(() => {
           if (this.vdMainButtonPressed)
-            this.vdPlayerStatus = 1;
+            this.vdPlayerStatus = playerSteps.STARTING;
+            setTimeout(() => {
+              this.vdPlayerStatus = playerSteps.MAIN_MENU;
+            }, 2000);
+        }, 1000);
+        return;
+      }
+      if (this.vdPlayerStatus === playerSteps.MAIN_MENU) {
+        if (this.vdMenuActive === 1) {
+          this.vdPlayerStatus = playerSteps.LOADING;
+          setTimeout(() => {
+            this.vdPlayerStatus = playerSteps.MUSIC_PLAYER;
+          }, 2000);
+        }
+        pressedTo = setTimeout(() => {
+          if (this.vdMainButtonPressed) {
+            this.vdPlayerStatus = playerSteps.TURNING_OFF;
+            setTimeout(() => {
+              this.vdPlayerStatus = playerSteps.OFF;
+            }, 2000);
+          }
         }, 2000);
         return;
       }
-      if (this.vdPlayerStatus === 1) {
-        if (this.vdMenuActive === 1) {
-          this.vdPlayerStatus = 2;
-          this.mtdTogglePlayAudio();
-        }
-        return;
-      }
-      if (this.vdPlayerStatus === 2) {
+      if (this.vdPlayerStatus === playerSteps.MUSIC_PLAYER) {
         this.mtdTogglePlayAudio();
         return;
       }
