@@ -192,6 +192,22 @@ const Mp3player = {
     mtdStopDraggingNav: function() {
       this.vdDraggingNav = false;
     },
+
+    /**
+     *
+     */
+    mtdClickMenuOption: function(_) {
+      if (_ === this.vdMenuActive) {
+        if (this.vdMenuActive === 1) {
+          this.vdPlayerStatus = playerSteps.LOADING;
+          setTimeout(() => {
+            this.vdPlayerStatus = playerSteps.MUSIC_PLAYER;
+          }, 2000);
+        }
+        return;
+      }
+      this.vdMenuActive = _;
+    },
   },
 };
 Vue.createApp(Mp3player).mount('#mp3player');

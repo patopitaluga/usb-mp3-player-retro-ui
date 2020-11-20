@@ -24,19 +24,15 @@ button:focus {
   outline:0;
 }
 
-* {
-
-  &:focus {
-    -webkit-tap-highlight-color: transparent;
-    outline:0;
-  }
-
-  &:active {
-    -webkit-tap-highlight-color: transparent;
-    outline: 0;
-  }
+*:focus {
+  -webkit-tap-highlight-color: transparent;
+  outline:0;
 }
 
+*:active {
+  -webkit-tap-highlight-color: transparent;
+  outline: 0;
+}
 
 .player {
   display: flex;
@@ -185,7 +181,7 @@ button:focus {
 .cta > div {
   align-items: center;
   border-radius: 50%;
-  box-shadow: inset 0 -2px 3px 1px rgba(105, 143, 144, .75);
+  box-shadow: inset 0 -1px 3px 2px rgba(105, 143, 144, .55);
   content: '';
   display: flex;
   height: 57px;
@@ -200,12 +196,10 @@ button:focus {
 
 .cta button {
   align-items: center;
-  background: #d6f9f5;
+  background: #def9f5;
   border: 0;
   border-radius: 50%;
   box-shadow:
-    inset 0 -2px 3px 1px rgba(115, 138, 144, .75),
-    inset 2px 1px 3px 1px rgba(115, 138, 144, .25),
     inset 4px 0 4px 2px rgba(255, 255, 255, .75)
   ;
   cursor: pointer;
@@ -213,7 +207,23 @@ button:focus {
   height: 46px;
   justify-content: center;
   margin: auto;
+  overflow: hidden;
+  position: relative;
   width: 46px;
+}
+
+.cta button::before {
+  border-radius: 50%;
+  box-shadow:
+    inset -1px -2px 2px 3px rgba(115, 138, 144, .45)
+  ;
+  content: '';
+  display: block;
+  height: 47px;
+  left: 0;
+  position: absolute;
+  width: 48px;
+  top: 0;
 }
 
 .cta button:active {
@@ -273,9 +283,12 @@ button:focus {
   align-items: center;
   display: flex;
   flex: 1 1 auto;
+  font-size: 11px;
   justify-content: center;
+  letter-spacing: 1px;
   margin: 0;
   text-align: center;
+  word-spacing: 3px;
 }
 
 .display__end {
@@ -284,6 +297,7 @@ button:focus {
   display: flex;
   flex: 1 1 auto;
   font-size: 18px;
+  font-style: italic;
   justify-content: flex-start;
   letter-spacing: -1px;
   margin: auto 0;
@@ -298,13 +312,13 @@ button:focus {
   border-bottom: 1px rgb(162, 188, 186) solid;
   content: '';
   display: block;
-  height: 3px;
+  height: 2px;
   left: 7px;
   position: absolute;
   top: 50%;
   margin-top: -3px;
-  margin-left: 1px;
-  width: 36px;
+  margin-left: 0;
+  width: 38px;
 }
 
 .display__end::after {
@@ -317,7 +331,7 @@ button:focus {
   position: absolute;
   width: 11px;
   top: 50%;
-  margin-top: -5px;
+  margin-top: -6px;
   right: 8px;
 }
 
@@ -380,7 +394,7 @@ button:focus {
   display: flex;
   list-style: none;
   margin: auto 0;
-  padding: 2px 4px 2px 3px;
+  padding: 2px 4px 2px 6px;
   width: 100%;
 }
 
@@ -389,7 +403,7 @@ button:focus {
   display: block;
   flex: 0 0 auto;
   margin: 0;
-  padding: 3px;
+  padding: 2px;
   text-align: center;
   width: 20%;
 }
@@ -413,12 +427,18 @@ button:focus {
   flex-direction: column;
   font-family: 'VT323', monospace;
   font-size: 14px;
-  height: 30px;
+  height: 34px;
   justify-content: flex-end;
   margin: 0;
   padding: 0;
   text-align: center;
   width: 100%;
+}
+
+.screen__content .menu1__item button img {
+  display: block;
+  margin: auto auto 0;
+  width: 12px;
 }
 
 .screen__content .menu1__item button span {
@@ -429,6 +449,43 @@ button:focus {
 
 .screen.screen--on .screen__content {
   background: rgba(0, 0, 255, .25);
+}
+
+.volume-control {
+  bottom: 0;
+  height: 10px;
+  margin-bottom: -5px;
+  position: absolute;
+  right: 180px;
+  width: 65px;
+}
+
+.volume-control::before {
+  background: linear-gradient(90deg, #fffeff 0%, #cbcfce 25%, #9d948f 100%);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 20px 4px;
+  box-shadow: inset 1px 0 1px 2px rgba(0, 0, 0, .15);
+  content: '';
+  display: block;
+  left: 0;
+  top: 0;
+  width: 58%;
+  bottom: 0;
+  position: absolute;
+}
+
+.volume-control::after {
+  background: linear-gradient(90deg, #9d948f 0%, #c1cdcb 50%, #b2b8b8 100%);
+  border-bottom-left-radius: 20px 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: inset -1px 0 1px 2px rgba(0, 0, 0, .15);
+  content: '';
+  display: block;
+  right: 0;
+  top: 0;
+  width: 58%;
+  bottom: 0;
+  position: absolute;
 }
 
 .top {
@@ -483,40 +540,38 @@ button:focus {
   display: flex;
   height: 17px;
   margin: auto;
-  width: 21px;
-}
-
-.play-icon::before {
-  border-color: transparent transparent transparent #b8cccc;
-  border-style: solid;
-  border-width: 8.5px 0 8.5px 12px;
-  content: '';
-  display: block;
-  margin: 0 auto 0 0;
-  height: 0;
-  width: 0;
+  width: 19px;
 }
 
 .play-icon i {
-  border-color: transparent transparent transparent #e6ffff;
-  border-style: solid;
-  border-width: 8.5px 0 8.5px 12px;
-  content: '';
   display: block;
-  margin: 0 auto 0 -10px;
-  height: 0;
-  width: 0;
+  height: 17px;
+  width: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.play-icon i::before {
+  display: block;
+  background: linear-gradient(45deg, #b8cccc 0%, #b8cccc 59%, #fff 60%);
+  box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, .15);
+  border-radius: 3px;
+  content: '';
+  height: 12px;
+  width: 12px;
+  transform: rotate(45deg);
+  transform-origin: top left;
 }
 
 .play-icon::after {
-  background: #e6ffff;
+  background: linear-gradient(90deg, rgba(184, 204, 204, .5) 0%, rgba(184, 204, 204, .5) 30%, rgba(255, 255, 255, 1) 35%);
   border-radius: 2px;
-  box-shadow: inset 2px 0 1px 0 rgba(0, 0, 0, .2);
+  box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, .15);
   content: '';
   display: block;
   height: 17px;
   margin: 0 0 0 auto;
-  width: 6px;
+  width: 5px;
 }
 
 .nav {
@@ -554,4 +609,53 @@ button:focus {
   top: 0;
   margin-top: -15px;
   z-index: 1;
+}
+
+.display--playing {
+  display: flex;
+  flex-direction: column;
+}
+
+.display--playing__row-1 {
+  display: flex;
+  font-size: 15px;
+  line-height: 13px;
+  text-transform: uppercase;
+}
+
+.display--playing ul {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  list-style: none;
+  margin: 0 1px 0 0;
+  padding: 0;
+}
+
+.display--playing li {
+  margin: 0;
+  padding: 0;
+}
+
+.display--playing p {
+  display: block;
+  margin: 0;
+}
+
+.display--playing__battery {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  width: 16px;
+  margin-right: 2px;
+}
+
+.display--playing__battery::before {
+  border: 1px rgba(0, 0, 0, .8) solid;
+  border-radius: 2px;
+  display: block;
+  content: '';
+  width: 10px;
+  height: 5px;
 }
