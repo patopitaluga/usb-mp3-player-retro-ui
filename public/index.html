@@ -44,6 +44,8 @@
   <meta name="twitter:image" content="og-image.jpg?r=1"/>
   <meta name="twitter:card" content="summary_large_image"/>
 
+<link rel="preload" href="https://fonts.gstatic.com/s/librebaskerville/v9/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcA.woff2" as="font" crossorigin="anonymous"/>
+<link rel="preload" href="https://fonts.gstatic.com/s/vt323/v12/pxiKyp0ihIEF2isfFJU.woff2" as="font" crossorigin="anonymous"/>
 <style>
 @font-face {
   font-family: 'Libre Baskerville';
@@ -130,88 +132,17 @@
               <div v-if="vdPlayerStatus === vdPlayerSteps.STARTING">
                 <p style="font-family: 'Libre Baskerville', serif;font-weight: 700;text-align: center;width: 100%;flex: 1 1 auto;display: block;">MP3 Player</p>
               </div>
-              <ul v-if="vdPlayerStatus === vdPlayerSteps.MAIN_MENU">
-                <li
-                  class="menu1__item"
-                  :class="{ 'menu1__item--active': vdMenuActive === 1 }"
-                >
-                  <button type="button" @click="mtdClickMenuOption(1)">
-                    <img alt="" src="images/itunes-note.svg"/>
-                    <span>MSC</span>
-                  </button>
-                </li>
-                <li
-                  class="menu1__item"
-                  :class="{ 'menu1__item--active': vdMenuActive === 2 }"
-                >
-                  <button type="button" @click="mtdClickMenuOption(2)">
-                    <img alt="" src="images/microphone-alt.svg"/>
-                    <span>REC</span>
-                  </button>
-                </li>
-                <li
-                  class="menu1__item"
-                  :class="{ 'menu1__item--active': vdMenuActive === 3 }"
-                >
-                  <button type="button" @click="mtdClickMenuOption(3)">
-                    <img alt="" src="images/surprise.svg"/>
-                    <span>RPL</span>
-                  </button>
-                </li>
-                <li
-                  class="menu1__item"
-                  :class="{ 'menu1__item--active': vdMenuActive === 4 }"
-                >
-                  <button type="button" @click="mtdClickMenuOption(4)">
-                    <img alt="" src="images/broadcast-tower.svg"/>
-                    <span>FM</span>
-                  </button>
-                </li>
-                <li
-                  class="menu1__item"
-                  :class="{ 'menu1__item--active': vdMenuActive === 5 }"
-                >
-                  <button type="button" @click="mtdClickMenuOption(5)">
-                    <img alt="" src="images/tools.svg"/>
-                    <span>SYS</span>
-                  </button>
-                </li>
-              </ul>
+              <screen-main-menu
+                v-show="vdPlayerStatus === vdPlayerSteps.MAIN_MENU"
+                :vp-menu-active="vdMenuActive"
+                @change="mtdMenuChanged"
+              >
+              </screen-main-menu>
               <div v-if="vdPlayerStatus === vdPlayerSteps.LOADING">
                 <p>Please Wait..</p>
               </div>
-              <div v-if="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER"
-                class="display--playing"
-              >
-                <div class="display--playing__row-1">
-                  <div style="margin: 0 1px;width: 13px;flex: 0 0 auto; border: 1px rgba(0, 0, 0, .8) solid;display: flex; justify-content: center; align-items: center;">
-                    <img alt="" src="images/itunes-note.svg" style="display: block;width: 8px;"/>
-                  </div>
-                  <ul style="width: 21px;">
-                    <li>320</li>
-                    <li>mp3</li>
-                  </ul>
-                  <ul style="font-size: 17px;;width: 21px;">
-                    <li>001</li>
-                    <li>005</li>
-                  </ul>
-                  <ul style="width: 11px;">
-                    <li></li>
-                    <li>N</li>
-                  </ul>
-                  <ul style="width: 21px;">
-                    <li>NOR</li>
-                    <li></li>
-                  </ul>
-                  <ul style="font-size: 18px;flex: 1 1 auto;">
-                    <li>00:06</li>
-                    <li>03:33</li>
-                  </ul>
-                  <div class="display--playing__battery">
-                  </div>
-                </div>
-                <p>Corona - The rythm of the night.mp3</p>
-              </div>
+              <screen-music-player v-if="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER">
+              </screen-music-player>
               <div v-if="vdPlayerStatus === vdPlayerSteps.TURNING_OFF">
                 <p>Stand by</p>
               </div>
@@ -228,16 +159,22 @@
     </div>
     <div class="volume-control">
     </div>
-    <div class="top">
-      <button
+    <button
+      class="top"
+      type="button"
+      @mousedown.prevent.stop="vdTop = !vdTop"
+      @touchstart.prevent.stop="vdTop = !vdTop"
+    >
+      <div
         v-show="vdTop"
-        type="button"
-        @mousedown.prevent.stop="vdTop = false"
-        @touchstart.prevent.stop="vdTop = false"
-        @click="vdTop = false"
+        class="top__cap"
       >
-      </button>
-    </div>
+      </div>
+      <div class="top__usb">
+        <i>
+        </i>
+      </div>
+    </button>
   </div>
 
 <script src="https://unpkg.com/vue@next"></script>

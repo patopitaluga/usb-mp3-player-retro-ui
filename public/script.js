@@ -1,4 +1,6 @@
 import { playerSteps } from './enum-player-status.mjs';
+import { screenMainMenuComponent } from './components/screen__main-menu.mjs';
+import { screenMusicPlayerComponent } from './components/screen__music-player.mjs';
 
 if (screen.lockOrientation)
   screen.lockOrientation('portrait');
@@ -195,19 +197,18 @@ const Mp3player = {
 
     /**
      *
+     *
+     * @param {number} _ -
      */
-    mtdClickMenuOption: function(_) {
-      if (_ === this.vdMenuActive) {
-        if (this.vdMenuActive === 1) {
-          this.vdPlayerStatus = playerSteps.LOADING;
-          setTimeout(() => {
-            this.vdPlayerStatus = playerSteps.MUSIC_PLAYER;
-          }, 2000);
-        }
-        return;
-      }
+    mtdMenuChanged: function(_) {
       this.vdMenuActive = _;
-    },
+    }
   },
 };
-Vue.createApp(Mp3player).mount('#mp3player');
+
+const usbMp3playerApp = Vue.createApp(Mp3player)
+
+usbMp3playerApp.component('screen-music-player', screenMusicPlayerComponent);
+usbMp3playerApp.component('screen-main-menu', screenMainMenuComponent);
+
+usbMp3playerApp.mount('#mp3player');
