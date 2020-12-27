@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <title>USB Mp3 player sim</title>
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, viewport-fit=cover"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com"/>
+<!--  <link rel="preconnect" href="https://fonts.gstatic.com"/> -->
   <link href="" rel="stylesheet"/>
   <link href="style.css" rel="stylesheet"/>
 
@@ -71,8 +71,8 @@
 <body>
   <div class="player" id="mp3player" v-cloak>
     <button
-      type="button"
       id="nav"
+      type="button"
       class="nav"
       :class="{ 'nav--dragging': vdDraggingNav }"
       :style="{ 'transform': 'rotate(' + vdDraggingNavDegree + 'deg)' }"
@@ -109,10 +109,17 @@
             </i>
           </button>
           <div
-            v-show="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER"
+            v-show="vdSptfyWidget"
             style="position: absolute; left: 0; top: 0;opacity: 0; margin-top: -11px; margin-left: -11px;"
           >
-            <iframe src="https://open.spotify.com/embed/track/0ofMkI3jzmGCElAOgOLeo3" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <iframe
+              allow="encrypted-media"
+              allowtransparency="true"
+              frameborder="0"
+              height="80"
+              src="https://open.spotify.com/embed/track/0ofMkI3jzmGCElAOgOLeo3"
+              width="250"
+            ></iframe>
           </div>
         </div>
       </div>
@@ -126,11 +133,14 @@
           </div>
           <div
             class="screen"
-            :class="{ 'screen--on': vdPlayerStatus !== vdPlayerSteps.OFF }"
+            :class="{ 'screen--on': vdBackLight }"
           >
             <div class="screen__content">
               <div v-if="vdPlayerStatus === vdPlayerSteps.STARTING">
-                <p style="font-family: 'Libre Baskerville', serif;font-weight: 700;text-align: center;width: 100%;flex: 1 1 auto;display: block;">MP3 Player</p>
+                <p style="font-size: 16px;text-align: center;">Starting...</p>
+              </div>
+              <div v-if="vdPlayerStatus === vdPlayerSteps.INTRO">
+                <p style="font-family: 'Libre Baskerville', serif;font-weight: 700;text-align: center;width: 100%;flex: 1 1 auto;display: block;padding-top: 2px;">MP3 Player</p>
               </div>
               <screen-main-menu
                 v-show="vdPlayerStatus === vdPlayerSteps.MAIN_MENU"
@@ -138,7 +148,7 @@
                 @change="mtdMenuChanged"
               >
               </screen-main-menu>
-              <div v-if="vdPlayerStatus === vdPlayerSteps.LOADING">
+              <div v-if="vdPlayerStatus === vdPlayerSteps.LOADING_MP">
                 <p>Please Wait..</p>
               </div>
               <screen-music-player v-if="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER">

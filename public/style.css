@@ -380,8 +380,8 @@ button:focus {
   display: flex;
   flex: 1 1 auto;
   height: 59px;
-  margin: 0;
-  width: 151px;
+  margin: 0 0 0 2px;
+  width: 149px;
   z-index: 5;
 }
 
