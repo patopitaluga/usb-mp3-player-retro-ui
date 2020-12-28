@@ -69,134 +69,130 @@
 </style>
 </head>
 <body>
-  <div class="player" id="mp3player" v-cloak>
-    <button
-      id="nav"
-      type="button"
-      class="nav"
-      :class="{ 'nav--dragging': vdDraggingNav }"
-      :style="{ 'transform': 'rotate(' + vdDraggingNavDegree + 'deg)' }"
-      @mousedown="mtdStartDraggingNav"
-      @touchstart.prevent.stop="mtdStartDraggingNav"
-      @mouseup="mtdStopDraggingNav"
-      @touchend.prevent.stop="mtdStopDraggingNav"
-    >
-    </button>
-    <div class="handle">
-    </div>
-    <div class="stick">
-    </div>
-    <div class="body">
-      <i class="i i--1"></i>
-      <i class="i i--2"></i>
-      <i class="i i--3"></i>
-      <i class="i i--4"></i>
-      <i class="i i--5"></i>
-      <i class="i i--6"></i>
-      <i class="i i--7"></i>
-      <div class="cta">
-        <div>
-          <button
-            type="button"
-            @mousedown="mtdMainButtonPressed"
-            @touchstart.prevent.stop="mtdMainButtonPressed"
-            @mouseup="mtdMainButtonReleased"
-            @touchend.prevent.stop="mtdMainButtonReleased"
-          >
-            <i class="play-icon">
-              <i>
-              </i>
-            </i>
-          </button>
-          <div
-            v-show="vdSptfyWidget"
-            style="position: absolute; left: 0; top: 0;opacity: 0; margin-top: -11px; margin-left: -11px;"
-          >
-            <iframe
-              allow="encrypted-media"
-              allowtransparency="true"
-              frameborder="0"
-              height="80"
-              src="https://open.spotify.com/embed/track/0ofMkI3jzmGCElAOgOLeo3"
-              width="250"
-            ></iframe>
-          </div>
-        </div>
+  <div id="app">
+    <div class="player" v-cloak>
+      <button
+        id="nav"
+        type="button"
+        class="nav"
+        :class="{ 'nav--dragging': vdDraggingNav }"
+        :style="{ 'transform': 'rotate(' + vdDraggingNavDegree + 'deg)' }"
+        @mousedown="mtdStartDraggingNav"
+        @touchstart.prevent.stop="mtdStartDraggingNav"
+        @mouseup="mtdStopDraggingNav"
+        @touchend.prevent.stop="mtdStopDraggingNav"
+      >
+      </button>
+      <div class="handle">
       </div>
-      <div class="display">
-        <div class="display__begin">
-          MP3
-        </div>
-        <div class="display__middle">
-          <div class="display__middle__part">
-            MP3 / WMA
+      <div class="stick">
+      </div>
+      <div class="body">
+        <i class="i i--1"></i>
+        <i class="i i--2"></i>
+        <i class="i i--3"></i>
+        <i class="i i--4"></i>
+        <i class="i i--5"></i>
+        <i class="i i--6"></i>
+        <i class="i i--7"></i>
+        <div class="cta">
+          <div>
+            <button
+              type="button"
+              @mousedown="mtdMainButtonPressed"
+              @touchstart.prevent.stop="mtdMainButtonPressed"
+              @mouseup="mtdMainButtonReleased"
+              @touchend.prevent.stop="mtdMainButtonReleased"
+            >
+              <i class="play-icon">
+                <i>
+                </i>
+              </i>
+            </button>
           </div>
-          <div
-            class="screen"
-            :class="{ 'screen--on': vdBackLight }"
-          >
-            <div class="screen__content">
-              <div v-if="vdPlayerStatus === vdPlayerSteps.STARTING">
-                <p style="font-size: 16px;text-align: center;">Starting...</p>
-              </div>
-              <div v-if="vdPlayerStatus === vdPlayerSteps.INTRO">
-                <p style="font-family: 'Libre Baskerville', serif;font-weight: 700;text-align: center;width: 100%;flex: 1 1 auto;display: block;padding-top: 2px;">MP3 Player</p>
-              </div>
-              <screen-main-menu
-                v-show="vdPlayerStatus === vdPlayerSteps.MAIN_MENU"
-                :vp-menu-active="vdMenuActive"
-                @change="mtdMenuChanged"
-              >
-              </screen-main-menu>
-              <div v-if="vdPlayerStatus === vdPlayerSteps.LOADING_MP">
-                <p>Please Wait..</p>
-              </div>
-              <screen-music-player v-if="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER">
-              </screen-music-player>
-              <div v-if="vdPlayerStatus === vdPlayerSteps.TURNING_OFF">
-                <p>Stand by</p>
+        </div>
+        <div class="display">
+          <div class="display__begin">
+            MP3
+          </div>
+          <div class="display__middle">
+            <div class="display__middle__part">
+              MP3 / WMA
+            </div>
+            <div
+              class="screen"
+              :class="{ 'screen--on': vdBackLight }"
+            >
+              <div class="screen__content">
+                <div v-if="vdPlayerStatus === vdPlayerSteps.STARTING">
+                  <p style="font-size: 16px;text-align: center;">Starting...</p>
+                </div>
+                <div v-if="vdPlayerStatus === vdPlayerSteps.INTRO">
+                  <p style="font-family: 'Libre Baskerville', serif;font-weight: 700;text-align: center;width: 100%;flex: 1 1 auto;display: block;padding-top: 2px;">MP3 Player</p>
+                </div>
+                <screen-main-menu
+                  v-show="vdPlayerStatus === vdPlayerSteps.MAIN_MENU"
+                  :vp-menu-active="vdMenuActive"
+                  @change="mtdMenuChanged"
+                >
+                </screen-main-menu>
+                <div v-if="vdPlayerStatus === vdPlayerSteps.LOADING_MP">
+                  <p>Please Wait..</p>
+                </div>
+                <screen-music-player v-if="vdPlayerStatus === vdPlayerSteps.MUSIC_PLAYER">
+                </screen-music-player>
+                <div v-if="vdPlayerStatus === vdPlayerSteps.TURNING_OFF">
+                  <p>Stand by</p>
+                </div>
               </div>
             </div>
+            <div class="display__middle__part">
+              Digital Audio Player
+            </div>
           </div>
-          <div class="display__middle__part">
-            Digital Audio Player
+          <div class="display__end">
+            USB
           </div>
-        </div>
-        <div class="display__end">
-          USB
         </div>
       </div>
-    </div>
-    <div class="volume-control">
-    </div>
-    <button
-      class="top"
-      type="button"
-      @mousedown.prevent.stop="vdTop = !vdTop"
-      @touchstart.prevent.stop="vdTop = !vdTop"
-    >
-      <div
-        v-show="vdTop"
-        class="top__cap"
+      <div class="volume-control">
+      </div>
+      <button
+        class="top"
+        type="button"
+        @mousedown.prevent.stop="vdTop = !vdTop"
+        @touchstart.prevent.stop="vdTop = !vdTop"
       >
-      </div>
-      <div class="top__usb">
-        <i>
-        </i>
-      </div>
-    </button>
+        <div
+          v-show="vdTop"
+          class="top__cap"
+        >
+        </div>
+        <div class="top__usb">
+          <i>
+          </i>
+        </div>
+      </button>
+    </div>
+
+    <div style="display: block; width: 100%; text-align: center;margin-top: 50px;" v-cloak>
+      <a
+        v-if="!vdSpotifyToken"
+        href="https://accounts.spotify.com/authorize?client_id=46949c7e28fa4626b444afd10323927c&redirect_uri=https%3A%2F%2Fpatopitaluga.github.io%2Fusb-mp3-player-retro-ui%2F&response_type=token&scope=streaming%20user-read-email%20user-read-private"
+        style="color: #30444b"
+      >Authorize Spotify</a>
+    </div>
   </div>
 
 <script src="https://unpkg.com/vue@next"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"
+  integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ=="
+  crossorigin="anonymous"
+></script>
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
-/*
-<iframe src="https://open.spotify.com/embed/album/6rrPmmb2lQd5pNRL6HKBZx" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous">
-<//script>
-<script src="https://sdk.scdn.co/spotify-player.js"><//script>
-
-window.spotifyToken = 'BQDIfFW7DuL2WeF0jC54kz5crpHxayyyctfKLsxptif6nQ81PYA6xSqrSIeXMiHvcFOZfZYEuLRkCsf7AuzG5w9-JxyESvT-_SwjiRoErkMzXoE9hIYZHu-f_tw14juckXxWUTb6qmrqF7nq2isa_VQRbDHIfAu-yi0v';
+window.spotifyToken = '';
 window.spotifyDeviceId = '';
 window.onSpotifyWebPlaybackSDKReady = () => {
   const player = new Spotify.Player({
@@ -204,9 +200,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     getOAuthToken:
       /**
        *
-       */ /*
+       */
       (_cb) => {
-
         _cb(window.spotifyToken);
       }
   });
@@ -233,7 +228,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   // Connect to the player!
   player.connect();
-}; */
+};
 </script>
 <script
   type="module"

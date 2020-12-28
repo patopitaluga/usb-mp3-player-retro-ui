@@ -26,8 +26,8 @@ const Mp3player = {
       vdPlayerSteps: playerSteps,
       vdIsPlaying: false,
       vdTop: true,
-      vdSptfyWidget: false,
       vdBackLight: false,
+      vdSpotifyToken: '',
     }
   },
   mounted: function() {
@@ -36,6 +36,13 @@ const Mp3player = {
     srcElement.src = 'pato-improvisacion-guitarra.mp3';
     this.vdAudioElement.appendChild(srcElement);
     this.vdAudioElement.load(); */
+
+    if (window.location.href.indexOf('#access_token=')) {
+      let sptfyToken = window.location.href.substr(window.location.href.indexOf('#access_token=') + 14);
+      sptfyToken = sptfyToken.substr(0, sptfyToken.indexOf('&'));
+      window.spotifyToken = sptfyToken;
+      this.vdSpotifyToken = sptfyToken;
+    }
 
     /**
      * This function will run when the user drags the document.
@@ -171,8 +178,7 @@ const Mp3player = {
       clearTimeout(timerDetectLongPress);
       if (this.vdPlayerStatus === playerSteps.STARTING)
         this.vdPlayerStatus = playerSteps.OFF;
-      if (this.vdPlayerStatus === playerSteps.LOADING_MP)
-        this.vdSptfyWidget = true;
+      // if (this.vdPlayerStatus === playerSteps.LOADING_MP)
     },
 
     /**
@@ -198,14 +204,14 @@ const Mp3player = {
       }
       this.vdAudioElement.play(); */
       if (this.vdIsPlaying) {
-        /* axios({
+        axios({
           method: 'put',
           url: 'https://api.spotify.com/v1/me/player/pause?device_id=' + window.spotifyDeviceId,
           data: { uris: ['spotify:track:0ofMkI3jzmGCElAOgOLeo3'], },
           headers: {
             'Authorization': 'Bearer ' + window.spotifyToken,
           },
-        }); */
+        });
         this.vdIsPlaying = false;
         return;
       }
@@ -215,14 +221,14 @@ const Mp3player = {
       // document.querySelector('#main button').click();
       // document.querySelector('[title="Reproducir"]').click();
       this.vdIsPlaying = true;
-      /* axios({
+      axios({
         method: 'put',
         url: 'https://api.spotify.com/v1/me/player/play?device_id=' + window.spotifyDeviceId,
         data: { uris: ['spotify:track:0ofMkI3jzmGCElAOgOLeo3'], },
         headers: {
           'Authorization': 'Bearer ' + window.spotifyToken,
         },
-      });*/
+      });
     },
 
     /**
@@ -268,4 +274,4 @@ const usbMp3playerApp = Vue.createApp(Mp3player)
 usbMp3playerApp.component('screen-music-player', screenMusicPlayerComponent);
 usbMp3playerApp.component('screen-main-menu', screenMainMenuComponent);
 
-usbMp3playerApp.mount('#mp3player');
+usbMp3playerApp.mount('#app');
