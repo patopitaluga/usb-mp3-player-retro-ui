@@ -2,7 +2,7 @@ import { playerSteps } from './../enum-player-status.mjs';
 
 const screenMainMenuComponent = {
   props: ['vpMenuActive'],
-  template: `<ul>
+  template: `<ul style="padding-top: 2px;">
   <li
     class="menu1__item"
     :class="{ 'menu1__item--active': vpMenuActive === 1 }"
@@ -55,12 +55,8 @@ const screenMainMenuComponent = {
      */
     mtdClickMenuOption: function(_) {
       if (_ === this.vpMenuActive) {
-        if (this.vpMenuActive === 1) {
-          this.vdPlayerStatus = playerSteps.LOADING;
-          setTimeout(() => {
-            this.vdPlayerStatus = playerSteps.MUSIC_PLAYER;
-          }, 2000);
-        }
+        if (this.vpMenuActive === 1)
+          this.$root.mtdStartMusicPlayerFeat();
         return;
       }
       this.$emit('change', _);

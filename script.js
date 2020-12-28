@@ -5,7 +5,7 @@ import { screenMusicPlayerComponent } from './components/screen__music-player.mj
 if (screen.lockOrientation)
   screen.lockOrientation('portrait');
 
-let pressedTo = setTimeout(() => {
+let timerDetectLongPress = setTimeout(() => {
 }, 10);
 let screenLit = setTimeout(() => {
 }, 10);
@@ -13,7 +13,6 @@ let screenLit = setTimeout(() => {
 let navStickXPosition = 0;
 let navStickYPosition = 0;
 let navTriggered = 0;
-
 const Mp3player = {
   data() {
     return {
@@ -27,6 +26,8 @@ const Mp3player = {
       vdPlayerSteps: playerSteps,
       vdIsPlaying: false,
       vdTop: true,
+      vdBackLight: false,
+      vdSpotifyToken: '',
     }
   },
   mounted: function() {
@@ -36,6 +37,13 @@ const Mp3player = {
     this.vdAudioElement.appendChild(srcElement);
     this.vdAudioElement.load(); */
 
+    if (window.location.href.indexOf('#access_token=')) {
+      let sptfyToken = window.location.href.substr(window.location.href.indexOf('#access_token=') + 14);
+      sptfyToken = sptfyToken.substr(0, sptfyToken.indexOf('&'));
+      window.spotifyToken = sptfyToken;
+      this.vdSpotifyToken = sptfyToken;
+    }
+
     /**
      * This function will run when the user drags the document.
      *
@@ -44,26 +52,52 @@ const Mp3player = {
     const handleTouchMove = (_evt) => {
       if (!this.vdDraggingNav) return;
 
+      /**
+       * Define dragging position with mouse or touchscreen.
+       */
       let draggingPos;
       if (_evt.changedTouches) draggingPos = [_evt.changedTouches[0].pageX, _evt.changedTouches[0].pageY];
       if (_evt.pageX) draggingPos = [_evt.pageX, _evt.pageY]; // debugging with mouse
 
-      let degreeRot = Math.atan(Math.abs(navStickYPosition - draggingPos[1]) / Math.abs(draggingPos[0] - navStickXPosition)) * -180 / Math.PI + 90;
-      if (draggingPos[0] < navStickXPosition) degreeRot = degreeRot *-1;
-      if (degreeRot > 40) {
+      // if (draggingPos[1] > navStickYPosition) draggingPos[1] = navStickYPosition - 50;
+
+      /**
+       * Calculate rotation degree.
+       */
+      let degreeRot = Math.atan(
+          Math.abs(navStickYPosition - draggingPos[1]) /
+          // Math.abs(draggingPos[0] - navStickXPosition) // without stickyness
+          Math.pow(draggingPos[0] - navStickXPosition, 2) * 300 // with stickyness
+        )
+        * -180 / Math.PI + 90;
+      /** stickyness */
+      // degreeRot *= Math.pow(draggingPos[0] - navStickXPosition, 2) * .01;
+
+      if (draggingPos[0] < navStickXPosition) degreeRot = degreeRot * -1; // negative is dragging to the left.
+
+      if (degreeRot > 40) { // max to the right
         degreeRot = 40;
+
+        /* if in the main menu */
         if (this.vdPlayerStatus === playerSteps.MAIN_MENU && this.navTriggered !== 1) {
           this.vdMenuActive++;
           this.navTriggered = 1;
         }
       }
-      if (degreeRot < -40) {
+
+      if (degreeRot < -40) { // max to the left
         degreeRot = -40;
+
+        /* if in the main menu */
         if (this.vdPlayerStatus === playerSteps.MAIN_MENU && this.navTriggered !== -1) {
           this.vdMenuActive--;
           this.navTriggered = -1;
         }
       }
+
+      /**
+       * Stop at first or last element.
+       */
       if (degreeRot < 0 && this.navTriggered === playerSteps.MAIN_MENU) this.navTriggered = 0;
       if (degreeRot > 0 && this.navTriggered === -1) this.navTriggered = 0;
 
@@ -71,7 +105,7 @@ const Mp3player = {
         this.vdMenuActive = 1;
       if (this.vdMenuActive > 5)
         this.vdMenuActive = 5;
-      this.vdDraggingNavDegree = degreeRot;
+      this.vdDraggingNavDegree = degreeRot; // update vue data.
     };
 
     /**
@@ -99,23 +133,28 @@ const Mp3player = {
     mtdMainButtonPressed: function() {
       this.vdMainButtonPressed = true;
       if (this.vdPlayerStatus === playerSteps.OFF) {
-        pressedTo = setTimeout(() => {
-          if (this.vdMainButtonPressed)
-            this.vdPlayerStatus = playerSteps.STARTING;
+        this.vdPlayerStatus = playerSteps.STARTING;
+        timerDetectLongPress = setTimeout(() => {
+          if (this.vdMainButtonPressed) {
+            this.mtdTurnOnBacklight();
+            this.vdPlayerStatus = playerSteps.INTRO;
             setTimeout(() => {
               this.vdPlayerStatus = playerSteps.MAIN_MENU;
             }, 2000);
+          }
         }, 1000);
         return;
       }
       if (this.vdPlayerStatus === playerSteps.MAIN_MENU) {
+        this.mtdTurnOnBacklight();
         if (this.vdMenuActive === 1) {
-          this.vdPlayerStatus = playerSteps.LOADING;
-          setTimeout(() => {
-            this.vdPlayerStatus = playerSteps.MUSIC_PLAYER;
-          }, 2000);
+          this.mtdStartMusicPlayerFeat();
         }
-        pressedTo = setTimeout(() => {
+
+        /**
+         * Detect longpress.
+         */
+        timerDetectLongPress = setTimeout(() => {
           if (this.vdMainButtonPressed) {
             this.vdPlayerStatus = playerSteps.TURNING_OFF;
             setTimeout(() => {
@@ -136,7 +175,21 @@ const Mp3player = {
      */
     mtdMainButtonReleased: function() {
       this.vdMainButtonPressed = false;
-      clearTimeout(pressedTo);
+      clearTimeout(timerDetectLongPress);
+      if (this.vdPlayerStatus === playerSteps.STARTING)
+        this.vdPlayerStatus = playerSteps.OFF;
+      // if (this.vdPlayerStatus === playerSteps.LOADING_MP)
+    },
+
+    /**
+     * Start music player feature.
+     */
+    mtdStartMusicPlayerFeat: function() {
+      this.vdPlayerStatus = playerSteps.LOADING_MP;
+
+      setTimeout(() => {
+        this.vdPlayerStatus = playerSteps.MUSIC_PLAYER;
+      }, 2000);
     },
 
     /**
@@ -151,14 +204,14 @@ const Mp3player = {
       }
       this.vdAudioElement.play(); */
       if (this.vdIsPlaying) {
-        /* axios({
+        axios({
           method: 'put',
           url: 'https://api.spotify.com/v1/me/player/pause?device_id=' + window.spotifyDeviceId,
           data: { uris: ['spotify:track:0ofMkI3jzmGCElAOgOLeo3'], },
           headers: {
             'Authorization': 'Bearer ' + window.spotifyToken,
           },
-        }); */
+        });
         this.vdIsPlaying = false;
         return;
       }
@@ -168,14 +221,14 @@ const Mp3player = {
       // document.querySelector('#main button').click();
       // document.querySelector('[title="Reproducir"]').click();
       this.vdIsPlaying = true;
-      /* axios({
+      axios({
         method: 'put',
         url: 'https://api.spotify.com/v1/me/player/play?device_id=' + window.spotifyDeviceId,
         data: { uris: ['spotify:track:0ofMkI3jzmGCElAOgOLeo3'], },
         headers: {
           'Authorization': 'Bearer ' + window.spotifyToken,
         },
-      });*/
+      });
     },
 
     /**
@@ -184,8 +237,8 @@ const Mp3player = {
     mtdStartDraggingNav: function() {
       this.vdDraggingNav = true;
 
-      navStickXPosition = document.querySelector('#nav').getBoundingClientRect().left;
-      navStickYPosition = document.querySelector('#nav').getBoundingClientRect().top;
+      navStickXPosition = document.querySelector('#nav').getBoundingClientRect().left + 6;
+      navStickYPosition = document.querySelector('#nav').getBoundingClientRect().bottom;
     },
 
     /**
@@ -202,7 +255,17 @@ const Mp3player = {
      */
     mtdMenuChanged: function(_) {
       this.vdMenuActive = _;
-    }
+    },
+
+    /**
+     *
+     */
+    mtdTurnOnBacklight: function() {
+      this.vdBackLight = true;
+      setTimeout(() => {
+        this.vdBackLight = false;
+      }, 5000);
+    },
   },
 };
 
@@ -211,4 +274,4 @@ const usbMp3playerApp = Vue.createApp(Mp3player)
 usbMp3playerApp.component('screen-music-player', screenMusicPlayerComponent);
 usbMp3playerApp.component('screen-main-menu', screenMainMenuComponent);
 
-usbMp3playerApp.mount('#mp3player');
+usbMp3playerApp.mount('#app');
